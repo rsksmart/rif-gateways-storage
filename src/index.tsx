@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "rifui";
+
+// Importing RIF UI stylesheet which cointains bootstrap css already
+import "rifui/css/style.css";
+import "rifui/css/extra.css";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
