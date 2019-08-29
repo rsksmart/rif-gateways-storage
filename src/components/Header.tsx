@@ -3,6 +3,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import Button from "react-bootstrap/Button";
 
 import LogoNavbar from "rifui/LogoNavbar";
 import Web3Provider from "providers/Web3Provider";
@@ -31,7 +32,11 @@ export default () => (
         <Web3Provider.Consumer>
           {({ state: { user }, actions: { lock, unlock } }) => (
             <div>
-              {!user && <Nav.Link onClick={unlock}>Unlock wallet</Nav.Link>}
+              {!user && (
+                <Button variant="outline-primary" onClick={unlock}>
+                  Unlock wallet
+                </Button>
+              )}
               {user && (
                 <NavDropdown title={`${user.address}`} id="basic-nav-dropdown">
                   <NavDropdown.Item>View wallet</NavDropdown.Item>

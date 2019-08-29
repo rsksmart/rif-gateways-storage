@@ -1,5 +1,6 @@
 import React from "react";
 import { Router } from "react-router-dom";
+import Container from "react-bootstrap/Container";
 
 import Web3Provider from "providers/Web3Provider";
 import Routes from "views/Routes";
@@ -21,7 +22,9 @@ const App: React.FC = () => {
           <Header />
 
           {/* Content of the dapp*/}
-          <Routes />
+          <Container>
+            <Routes />
+          </Container>
           <div style={{ flexGrow: 1 }} />
 
           <Footer />

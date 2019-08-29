@@ -1,15 +1,16 @@
 import React from "react";
-import { LinkContainer } from "react-router-bootstrap";
-import Button from "react-bootstrap/Button";
+import { Link } from "react-router-dom";
 
 import { ROUTES } from "routes";
 
 export default () => (
   <div>
     This should be good enough to start working. There is a{" "}
-    <LinkContainer to={ROUTES.EXAMPLE}>
-      <Button variant="link">reference page</Button>
-    </LinkContainer>{" "}
-    with a all the components for RIF but not using "react-bootstrap".
+    <Link to={ROUTES.EXAMPLE}>reference page</Link> with a all the components
+    for RIF but not using{" "}
+    <a href="https://react-bootstrap.github.io/components/alerts/">
+      "react-bootstrap"
+    </a>
+    .
   </div>
 );
