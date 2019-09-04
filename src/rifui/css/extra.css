@@ -1,0 +1,27 @@
+/*Custom Input for upload files */
+.c-upload-file-input {
+    height: 0;
+    overflow: hidden;
+    width: 0;
+}
+
+.c-upload-file-input + label {
+    background: #f0f0f5;
+    border: 1px dashed rgba(0,0,0,.2);
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    font-family: 'Montserrat',sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(0,0,0,.5);
+    text-align: center;
+    outline: none;
+    padding: 5rem 1rem;
+    transition: all 0.3s;
+    vertical-align: middle;
+}
+
+.c-upload-file-input+ label:hover {
+    background: rgba(0,0,0,.2);
+}
