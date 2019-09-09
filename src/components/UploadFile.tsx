@@ -1,12 +1,19 @@
-import React, {Component, useCallback} from "react";
-import {Table, Button} from  "react-bootstrap";
+import React, {Component} from "react";
+import {Table, Button, Form} from "react-bootstrap";
 import {useDropzone} from 'react-dropzone';
-import {log} from "util";
 
-function MyDropzone(props) {
-    const onDrop = useCallback(acceptedFiles => {
-        console.log('files dropped');
-    }, []);
+type MyProps = {};
+type MyState = {
+    selectedFile: {
+        name: ''
+    },
+    fileName: undefined,
+};
+
+function MyDropZone(props) {
+    // const onDrop = useCallback(acceptedFiles => {
+    //     console.log('files dropped');
+    // }, []);
 
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
 
@@ -24,30 +31,39 @@ function MyDropzone(props) {
                 <input {...getInputProps()} />
                 <span>Drag 'n' drop some files here, or click to select files</span>
             </div>
-            {files.length ? <Table striped borderless responsive size="sm">
-                <thead>
-                <tr>
-                    <th className="text-left">File Name</th>
-                    <th className="text-center">Type</th>
-                    <th className="text-right">Size</th>
-                </tr>
-                </thead>
-                <tbody className="fs-11">
-                {files}
-                </tbody>
-            </Table> : <span>
-            </span>}
+            {files.length ?
+                <div>
+                    <Table striped borderless responsive size="sm">
+                        <thead>
+                            <tr>
+                                <th className="text-left">File Name</th>
+                                <th className="text-center">Type</th>
+                                <th className="text-right">Size</th>
+                            </tr>
+                        </thead>
+                        <tbody className="fs-11">
+                            {files}
+                        </tbody>
+                    </Table>
+                    <div className="text-left mt-4">
+                        <h4><strong>Privacy</strong></h4>
+                        <Form className="mb-3">
+                            {['radio'].map(type => (
+                                <div key={`default-${type}`}>
+                                    <Form.Check
+                                        type={"radio"}
+                                        id={`default-${type}`}
+                                        label={'Content is public'}
+                                    />
+                                </div>
+                            ))}
+                        </Form>
+                    </div>
+                </div> : <span> </span>
+            }
         </section>
     );
 }
-
-type MyProps = {};
-type MyState = {
-    selectedFile: {
-        name: ''
-    },
-    fileName: undefined
-};
 
 export default class UploadFile extends Component <MyProps, MyState> {
     constructor(props) {
@@ -68,7 +84,7 @@ export default class UploadFile extends Component <MyProps, MyState> {
     render () {
         return(
             <div className="text-right">
-                <MyDropzone/>
+                <MyDropZone/>
                 <Button variant="secondary" size="lg" onClick={this.onClickHandler}>
                     Next
                 </Button>
