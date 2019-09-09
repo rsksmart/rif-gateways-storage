@@ -19,7 +19,7 @@ export default () => (
     </LinkContainer>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="justify-content-end">
+      <Nav className="ml-auto justify-content-end">
         <LinkContainer to={ROUTES.DOWNLOAD}>
           <Nav.Link>Download</Nav.Link>
         </LinkContainer>
