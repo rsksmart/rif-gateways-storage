@@ -30,7 +30,19 @@
     overflow: hidden;
     background: rgba(0,0,0,.05);
 }
+
 .table thead th {
     background: #C4C4C4;
     font-size: 14px;
+}
+
+/* Inputs */
+.custom-input {
+    border-width: 0 0 1px 0;
+}
+
+.custom-input:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #149DD9;
 }

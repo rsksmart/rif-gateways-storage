@@ -27,7 +27,7 @@ function MyDropZone(props) {
 
     return (
         <section className="upload-file-container">
-            <div {...getRootProps({className: 'dropzone mb-3'})}>
+            <div {...getRootProps({className: 'dropzone mb-4'})}>
                 <input {...getInputProps()} />
                 <span>Drag 'n' drop some files here, or click to select files</span>
             </div>
@@ -48,15 +48,35 @@ function MyDropZone(props) {
                     <div className="text-left mt-4">
                         <h4><strong>Privacy</strong></h4>
                         <Form className="mb-3">
-                            {['radio'].map(type => (
-                                <div key={`default-${type}`}>
-                                    <Form.Check
-                                        type={"radio"}
-                                        id={`default-${type}`}
-                                        label={'Content is public'}
-                                    />
-                                </div>
-                            ))}
+                            <Form.Check
+                                name="privacy-opt"
+                                type='radio'
+                                id='public-content'
+                                label={'Content is public'}
+                            />
+                            <Form.Check
+                                name="privacy-opt"
+                                type='radio'
+                                id='private-content'
+                                label={'Content is private'}
+                            />
+
+                            <h4 className="mt-4"><strong>Incentivisation</strong></h4>
+                            <Form.Check
+                                name="pay-content"
+                                type='radio'
+                                id='users-pay'
+                                label={'Users will pay to view my content'}
+                            />
+                            <Form.Check
+                                name="pay-content"
+                                type='radio'
+                                id='me-pay'
+                                label={'I will pay to store  the content'}
+                            />
+
+                            <h4 className="mt-4"><strong>Storage provider</strong></h4>
+                            <Form.Control type="text" placeholder=""/>
                         </Form>
                     </div>
                 </div> : <span> </span>
