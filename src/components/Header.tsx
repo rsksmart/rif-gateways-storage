@@ -29,6 +29,9 @@ export default () => (
         <LinkContainer to={ROUTES.SETTINGS}>
           <Nav.Link>Settings</Nav.Link>
         </LinkContainer>
+          <LinkContainer to={ROUTES.PROFILE}>
+              <Nav.Link>My Profile</Nav.Link>
+          </LinkContainer>
         <Web3Provider.Consumer>
           {({ state: { user }, actions: { lock, unlock } }) => (
             <div>

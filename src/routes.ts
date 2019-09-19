@@ -15,7 +15,8 @@ export const ROUTES = {
   DOWNLOAD: "/download",
   UPLOAD: "/upload",
   SETTINGS: "/settings",
-  EXAMPLE: "/example"
+  PROFILE: "/profile",
+  EXAMPLE: "/example",
 };
 
 export const history = createBrowserHistory();
