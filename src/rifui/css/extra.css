@@ -37,6 +37,10 @@
 }
 
 /* Inputs */
+.custom-control-label {
+    font-family: 'Montserrat',sans-serif;
+    font-weight: 400;
+}
 .custom-input {
     border-width: 0 0 1px 0;
 }

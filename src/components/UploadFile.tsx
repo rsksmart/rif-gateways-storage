@@ -34,7 +34,7 @@ function MyDropZone(props) {
                 <input {...getInputProps()} />
                 <span>Drag 'n' drop some files here, or click to select files</span>
             </div>
-            {files.length ?
+            {files.length > 0 ?
                 <div>
                     <Table striped borderless responsive size="sm">
                         <thead>
@@ -48,7 +48,65 @@ function MyDropZone(props) {
                             {files}
                         </tbody>
                     </Table>
-                </div> : <span> </span>
+                    <h4 className="mt-4"><strong>Privacy</strong></h4>
+                    <Form className="mb-3">
+                        <Form.Check
+                            custom
+                            name="privacy-option"
+                            type='radio'
+                            id='public-content'
+                            label={'Content is public'}
+                            value="public"
+                            checked={props.privacyOptionChecked}
+                            onChange={props.privacyOptionChanged}
+                        />
+                        <Form.Check
+                            custom
+                            name="privacy-option"
+                            type='radio'
+                            id='private-content'
+                            label={'Content is private'}
+                            value="private"
+                            onChange={props.privacyOptionChanged}
+                        />
+
+                        <h4 className="mt-4"><strong>Incentivisation</strong></h4>
+                        <Form.Check
+                            custom
+                            name="pay-content"
+                            type='radio'
+                            id='users-pay'
+                            label={'Users will pay to view my content'}
+                            value="usersPay"
+                            checked={props.payContentChecked}
+                            onChange={props.payContentChanged}
+                        />
+                        <Form.Check
+                            custom
+                            disabled={true}
+                            name="pay-content"
+                            type='radio'
+                            id='me-pay'
+                            label={'I will pay to store  the content'}
+                            value="mePay"
+                            onChange={props.payContentChanged}
+                        />
+
+                        <h4 className="mt-4"><strong>Storage provider</strong></h4>
+                        <Form.Control
+                            type="text"
+                            placeholder=""
+                            id="storage-provider"
+                            value={props.storageProviderValue}
+                            onChange={props.storageProviderChanged}
+                        />
+                    </Form>
+                    <div className="text-right">
+                        <Button variant="secondary" size="lg" onClick={props.nextHandlerClick}>
+                            Next
+                        </Button>
+                    </div>
+                </div> : ''
             }
         </section>
     );
@@ -68,102 +126,49 @@ export default class UploadFile extends Component <MyProps, MyState> {
             storageProvider: '',
         };
 
-        this.radioChangePrivacy = this.radioChangePrivacy.bind(this);
-        this.radioChangeIncentivisation = this.radioChangeIncentivisation.bind(this);
-        this.handleChangeStorageProvider = this.handleChangeStorageProvider.bind(this);
+        this.handlerRadioPrivacy = this.handlerRadioPrivacy.bind(this);
+        this.handlerRadioIncentivisation = this.handlerRadioIncentivisation.bind(this);
+        this.handlerChangeStorageProvider = this.handlerChangeStorageProvider.bind(this);
     }
 
-    radioChangePrivacy= changeEvent => {
+    handlerRadioPrivacy= changeEvent => {
         this.setState({
             selectedOptionPrivacy: changeEvent.target.value
         });
-
-        console.log(this.state.selectedOptionPrivacy);
     };
 
-    radioChangeIncentivisation= changeEvent => {
+    handlerRadioIncentivisation= changeEvent => {
         this.setState({
             selectedOptionIncentivisation: changeEvent.target.value
         });
+    };
 
-        console.log(this.state.selectedOptionIncentivisation);
-    }
-
-    handleChangeStorageProvider(e) {
+    handlerChangeStorageProvider(e) {
         this.setState({ storageProvider: e.target.value });
-        console.log(this.state.storageProvider);
-    }
+    };
 
-    onClickHandler = () => {
+    onClickHandlerNext = () => {
         console.log('CLICK');
         // const data = new FormData();
         // data.append('file', this.state.selectedFile)
     };
 
     render () {
+        console.log(this.state.selectedOptionPrivacy);
+        console.log(this.state.storageProvider);
+        console.log(this.state.selectedOptionIncentivisation);
+
         return(
-            <div className="text-right">
-                <MyDropZone/>
-                <div className="text-left mt-4">
-                    <h4><strong>Privacy</strong></h4>
-                    <Form className="mb-3">
-                        <Form.Check
-                            custom
-                            name="privacy-opt"
-                            type='radio'
-                            id='public-content'
-                            label={'Content is public'}
-                            value="public"
-                            checked={this.state.selectedOptionPrivacy === 'public'}
-                            onChange={this.radioChangePrivacy}
-                        />
-                        <Form.Check
-                            custom
-                            name="privacy-opt"
-                            type='radio'
-                            id='private-content'
-                            label={'Content is private'}
-                            value="private"
-                            // checked={this.state.selectedOptionPrivacy === 'private'}
-                            onChange={this.radioChangePrivacy}
-                        />
-
-                        <h4 className="mt-4"><strong>Incentivisation</strong></h4>
-                        <Form.Check
-                            custom
-                            name="pay-content"
-                            type='radio'
-                            id='users-pay'
-                            label={'Users will pay to view my content'}
-                            value="usersPay"
-                            checked={this.state.selectedOptionIncentivisation === 'usersPay'}
-                            onChange={this.radioChangeIncentivisation}
-                        />
-                        <Form.Check
-                            custom
-                            disabled={true}
-                            name="pay-content"
-                            type='radio'
-                            id='me-pay'
-                            label={'I will pay to store  the content'}
-                            value="mePay"
-                            // checked={this.state.selectedOptionPrivacy === 'mePay'}
-                            onChange={this.radioChangeIncentivisation}
-                        />
-
-                        <h4 className="mt-4"><strong>Storage provider</strong></h4>
-                        <Form.Control
-                            type="text"
-                            placeholder=""
-                            id="storage-provider"
-                            value={this.state.storageProvider}
-                            onChange={this.handleChangeStorageProvider}
-                        />
-                    </Form>
-                </div>
-                <Button variant="secondary" size="lg" onClick={this.onClickHandler}>
-                    Next
-                </Button>
+            <div>
+                <MyDropZone
+                    privacyOptionChecked={this.state.selectedOptionPrivacy === 'public'}
+                    privacyOptionChanged={this.handlerRadioPrivacy}
+                    payContentChecked={this.state.selectedOptionIncentivisation === 'usersPay'}
+                    payContentChanged={this.handlerRadioIncentivisation}
+                    storageProviderValue={this.state.storageProvider}
+                    storageProviderChanged={this.handlerChangeStorageProvider}
+                    nextHandlerClick={this.onClickHandlerNext}
+                />
             </div>
         )
     }
