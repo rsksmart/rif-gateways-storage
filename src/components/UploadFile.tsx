@@ -2,15 +2,15 @@ import React, {Component} from "react";
 import {Table, Button, Form} from "react-bootstrap";
 import {useDropzone} from 'react-dropzone';
 
-type MyProps = {};
-type MyState = {
+type UploadProps = {};
+type UploadState = {
     selectedFile: {
-        name: ''
+        name:string
     },
-    fileName: undefined,
-    selectedOptionPrivacy: 'public',
-    selectedOptionIncentivisation: 'usersPay',
-    storageProvider: '',
+    fileName:string,
+    selectedOptionPrivacy:string,
+    selectedOptionIncentivisation:string,
+    storageProvider:string,
 };
 
 function MyDropZone(props) {
@@ -112,15 +112,14 @@ function MyDropZone(props) {
     );
 }
 
-export default class UploadFile extends Component <MyProps, MyState> {
-    // private readonly handleChangeUserPay: any;
+export default class UploadFile extends Component <UploadProps, UploadState> {
     constructor(props, context) {
         super(props, context);
         this.state = {
             selectedFile: {
                 name: ''
             },
-            fileName: undefined,
+            fileName: '',
             selectedOptionPrivacy: 'public',
             selectedOptionIncentivisation: 'usersPay',
             storageProvider: '',

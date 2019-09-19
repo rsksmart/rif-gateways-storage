@@ -14,6 +14,7 @@ export const ROUTES = {
   HOME: "/",
   DOWNLOAD: "/download",
   UPLOAD: "/upload",
+  UPLOADING: "/uploading",
   SETTINGS: "/settings",
   PROFILE: "/profile",
   EXAMPLE: "/example",
