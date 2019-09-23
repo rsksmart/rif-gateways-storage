@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Table, Button, Form} from "react-bootstrap";
 import {useDropzone} from 'react-dropzone';
+import UploadContext from 'providers/UploadProvider';
 
 type UploadProps = {};
 type UploadState = {
@@ -17,6 +18,9 @@ function MyDropZone(props) {
     // const onDrop = useCallback(acceptedFiles => {
     //     console.log('files dropped');
     // }, []);
+    console.log('PROVIDER ' + props.server);
+    console.log('PROVIDER ' + props.privacy);
+    console.log('PROVIDER ' + props.incentivisation);
 
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
 
@@ -147,27 +151,41 @@ export default class UploadFile extends Component <UploadProps, UploadState> {
     };
 
     onClickHandlerNext = () => {
-        console.log('CLICK');
+        console.log(this.context);
         // const data = new FormData();
         // data.append('file', this.state.selectedFile)
     };
 
     render () {
-        console.log(this.state.selectedOptionPrivacy);
-        console.log(this.state.storageProvider);
-        console.log(this.state.selectedOptionIncentivisation);
-
         return(
             <div>
-                <MyDropZone
-                    privacyOptionChecked={this.state.selectedOptionPrivacy === 'public'}
-                    privacyOptionChanged={this.handlerRadioPrivacy}
-                    payContentChecked={this.state.selectedOptionIncentivisation === 'usersPay'}
-                    payContentChanged={this.handlerRadioIncentivisation}
-                    storageProviderValue={this.state.storageProvider}
-                    storageProviderChanged={this.handlerChangeStorageProvider}
-                    nextHandlerClick={this.onClickHandlerNext}
-                />
+                <UploadContext.Consumer>
+                    {({ state: {
+                        server,
+                        privacy,
+                        incentivisation },
+                        actions: {
+                            setServer,
+                            setPrivacy,
+                            setIncentivisation
+                    } }) => (
+                        <MyDropZone
+                            privacyOptionChecked={this.state.selectedOptionPrivacy === 'public'}
+                            privacyOptionChanged={this.handlerRadioPrivacy}
+                            payContentChecked={this.state.selectedOptionIncentivisation === 'usersPay'}
+                            payContentChanged={this.handlerRadioIncentivisation}
+                            storageProviderValue={this.state.storageProvider}
+                            storageProviderChanged={this.handlerChangeStorageProvider}
+                            nextHandlerClick={this.onClickHandlerNext}
+                            server={server}
+                            setServer={setServer}
+                            privacy={privacy}
+                            setPrivacy={setPrivacy}
+                            incentivisation={incentivisation}
+                            setIncentivisation={setIncentivisation}
+                        />
+                    )}
+                </UploadContext.Consumer>
             </div>
         )
     }
