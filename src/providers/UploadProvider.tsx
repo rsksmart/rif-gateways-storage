@@ -1,87 +1,86 @@
-import React, {Component, createContext} from "react";
+import React, { Component, createContext } from "react";
 
-export interface IUploadProvider {
-    state: {
-        server: string;
-        privacy: string;
-        incentivisation: string;
-    };
-    actions: {
-        setServer: (any) => void,
-        setPrivacy: (any) => void,
-        setIncentivisation: (any) => void
-    };
+export enum EPRIVACY_TYPE {
+  PRIVATE = "private",
+  PUBLIC = "public"
 }
 
-const { Provider, Consumer } = createContext <IUploadProvider>({
-    state: {
-        server: 'Swarm',
-        privacy: 'public',
-        incentivisation: 'usersPay',
-    },
+export interface IUploadProvider {
+  state: {
+    privacy: EPRIVACY_TYPE;
+    incentivisation: string;
+  };
+  actions: {
+    setPrivacy: (any) => void;
+    setIncentivisation: (any) => void;
+  };
+}
 
-    actions: {
-        setServer: () => {},
-        setPrivacy: () => {},
-        setIncentivisation: () => {}
-    }
+const { Provider, Consumer } = createContext<IUploadProvider>({
+  state: {
+    privacy: EPRIVACY_TYPE.PUBLIC,
+    incentivisation: "usersPay"
+  },
+
+  actions: {
+    setPrivacy: () => {},
+    setIncentivisation: () => {}
+  }
 });
 
 interface IUploadProviderProps {}
 interface IUploadProviderState {
-    server: 'Swarm',
-    privacy: 'public',
-    incentivisation: 'usersPay',
+  server: "Swarm";
+  privacy: EPRIVACY_TYPE.PUBLIC;
+  incentivisation: "usersPay";
 }
 
-class UploadProvider extends Component<IUploadProviderProps, IUploadProviderState> {
-    constructor(props: object) {
-        super(props);
+class UploadProvider extends Component<
+  IUploadProviderProps,
+  IUploadProviderState
+> {
+  constructor(props: object) {
+    super(props);
 
-        this.state = {
-            server: 'Swarm',
-            privacy: 'public',
-            incentivisation: 'usersPay',
-        };
-
-        this.setServer = this.setServer.bind(this);
-        this.setPrivacy = this.setPrivacy.bind(this);
-        this.setIncentivisation = this.setIncentivisation.bind(this);
-    }
-
-    setServer(e){
-        this.setState({server: e.target.value})
+    this.state = {
+      server: "Swarm",
+      privacy: EPRIVACY_TYPE.PUBLIC,
+      incentivisation: "usersPay"
     };
 
-    setPrivacy(e){
-        this.setState({privacy: e.target.value})
-    };
+    this.setPrivacy = this.setPrivacy.bind(this);
+    this.setIncentivisation = this.setIncentivisation.bind(this);
+  }
 
-    setIncentivisation(e) {
-        this.setState({incentivisation: e.target.value})
-    };
+  setPrivacy(e) {
+    this.setState({ privacy: e.target.value });
+  }
 
-    render (){
-        const {server, privacy, incentivisation} = this.state;
-        const { setServer, setPrivacy, setIncentivisation} = this;
+  setIncentivisation(e) {
+    this.setState({ incentivisation: e.target.value });
+  }
 
-        return (
-            <Provider value={{
-                state:{
-                    server,
-                    privacy,
-                    incentivisation
-                },
-                actions:{
-                    setServer,
-                    setPrivacy,
-                    setIncentivisation,
-                }
-            }}>
-                {this.props.children}
-            </Provider>
-        )
-    }
+  render() {
+    const { privacy, incentivisation } = this.state;
+    const { setPrivacy, setIncentivisation } = this;
+
+    return (
+      <Provider
+        value={{
+          state: {
+            privacy,
+            incentivisation
+          },
+          actions: {
+            setPrivacy,
+            setIncentivisation
+          }
+        }}
+      >
+        {this.props.children}
+      </Provider>
+    );
+  }
 }
 
 export default { Consumer, Provider: UploadProvider };
