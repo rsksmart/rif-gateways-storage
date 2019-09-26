@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, createContext} from "react";
 
 export interface IUploadProvider {
     state: {
@@ -7,22 +7,23 @@ export interface IUploadProvider {
         incentivisation: string;
     };
     actions: {
-        setServer:(value:string) =>void,
-        setPrivacy:(value:string) =>void,
-        setIncentivisation:(value:string) =>void
+        setServer: (any) => void,
+        setPrivacy: (any) => void,
+        setIncentivisation: (any) => void
     };
 }
 
-const { Provider, Consumer } = React.createContext <IUploadProvider>({
+const { Provider, Consumer } = createContext <IUploadProvider>({
     state: {
         server: 'Swarm',
         privacy: 'public',
         incentivisation: 'usersPay',
     },
+
     actions: {
-        setServer:(value) =>{},
-        setPrivacy:(value) =>{},
-        setIncentivisation:(value) =>{}
+        setServer: () => {},
+        setPrivacy: () => {},
+        setIncentivisation: () => {}
     }
 });
 
@@ -48,16 +49,16 @@ class UploadProvider extends Component<IUploadProviderProps, IUploadProviderStat
         this.setIncentivisation = this.setIncentivisation.bind(this);
     }
 
-    setServer(value){
-        this.setState({server: value})
+    setServer(e){
+        this.setState({server: e.target.value})
     };
 
-    setPrivacy(value){
-        this.setState({privacy: value})
+    setPrivacy(e){
+        this.setState({privacy: e.target.value})
     };
 
-    setIncentivisation(value) {
-        this.setState({incentivisation: value})
+    setIncentivisation(e) {
+        this.setState({incentivisation: e.target.value})
     };
 
     render (){
@@ -84,16 +85,3 @@ class UploadProvider extends Component<IUploadProviderProps, IUploadProviderStat
 }
 
 export default { Consumer, Provider: UploadProvider };
-
-// return (
-//             <ThemeContext.Provider value="dark">
-//                 <Toolbar />
-//             </ThemeContext.Provider>
-//         );
-
-// class ThemedButton extends React.Component {
-//     static contextType = UploadContext;
-//     render() {
-//         return <Button theme={this.context} />;
-//     }
-// }

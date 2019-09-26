@@ -18,9 +18,9 @@ function MyDropZone(props) {
     // const onDrop = useCallback(acceptedFiles => {
     //     console.log('files dropped');
     // }, []);
-    console.log('PROVIDER ' + props.server);
-    console.log('PROVIDER ' + props.privacy);
-    console.log('PROVIDER ' + props.incentivisation);
+    console.log('SERVER ' + props.server);
+    console.log('PRIVACY ' + props.privacy);
+    console.log('INCENT ' + props.incentivisation);
 
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
 
@@ -98,6 +98,7 @@ function MyDropZone(props) {
 
                         <h4 className="mt-4"><strong>Storage provider</strong></h4>
                         <Form.Control
+                            // readOnly
                             type="text"
                             placeholder=""
                             id="storage-provider"
@@ -168,21 +169,18 @@ export default class UploadFile extends Component <UploadProps, UploadState> {
                             setServer,
                             setPrivacy,
                             setIncentivisation
-                    } }) => (
+                    }}) => (
                         <MyDropZone
                             privacyOptionChecked={this.state.selectedOptionPrivacy === 'public'}
-                            privacyOptionChanged={this.handlerRadioPrivacy}
+                            privacyOptionChanged={e => {this.handlerRadioPrivacy(e); setPrivacy(e)}}
                             payContentChecked={this.state.selectedOptionIncentivisation === 'usersPay'}
-                            payContentChanged={this.handlerRadioIncentivisation}
+                            payContentChanged={e => {this.handlerRadioIncentivisation(e); setIncentivisation(e)}}
                             storageProviderValue={this.state.storageProvider}
-                            storageProviderChanged={this.handlerChangeStorageProvider}
+                            storageProviderChanged={e => {this.handlerChangeStorageProvider(e); setServer(e)}}
                             nextHandlerClick={this.onClickHandlerNext}
                             server={server}
-                            setServer={setServer}
                             privacy={privacy}
-                            setPrivacy={setPrivacy}
                             incentivisation={incentivisation}
-                            setIncentivisation={setIncentivisation}
                         />
                     )}
                 </UploadContext.Consumer>
