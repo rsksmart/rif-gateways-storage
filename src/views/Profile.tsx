@@ -11,43 +11,54 @@ import {
 } from "react-bootstrap";
 import Web3Provider from "providers/Web3Provider";
 
+const renderHistory = history => {
+  return history.map(item => (
+    <tr key={item.date}>
+      <td>{item.date}</td>
+      <td className="text-center">{item.amount}</td>
+      <td
+        className={`text-center text-${
+          item.type === "Deposit" ? "primary" : "secondary"
+        }`}
+      >
+        {item.type}
+      </td>
+    </tr>
+  ));
+};
+
 const MyProfile = () => {
   const [show, setShow] = useState(false);
   const [showD, setShowD] = useState(false);
   const [value, setValue] = useState(0);
-  const [myClass, setMyClass] = useState("d-none");
-  const handleCloseDeposit = () => setShowD(false);
+  const handleCloseDeposit = fn => {
+    fn();
+    setShowD(false);
+  };
   const handleShowDeposit = () => setShowD(true);
-  const handleCloseWithdraw = () => setShow(false);
+  const handleCloseWithdraw = fn => {
+    fn();
+    setShow(false);
+  };
   const handleShowWithdraw = () => setShow(true);
 
   const handleModalButton = fn => {
     fn(value);
     setValue(0);
-    fn(myClass);
-    setMyClass("d-block");
-
-    // handleCloseDeposit();
-    // handleCloseWithdraw();
   };
 
   return (
     <Web3Provider.Consumer>
-      {({ state: { user }, actions: { depositBalance, withdrawBalance } }) => (
+      {({
+        state: { user, success, message },
+        actions: { depositBalance, withdrawBalance, resetMessage }
+      }) => (
         <Container className="py-5">
           <h1 className="text-center mb-5">My Profile</h1>
           {user && user.address && (
             <Row className="justify-content-md-center">
               <Col lg="auto">
                 <ul className="list-unstyled text-center">
-                  {/*<li className="mb-2 text-muted">{user.address}</li>*/}
-                  {/*<li className="text-secondary">*/}
-                  {/*<strong>{user.rskAddress}</strong>*/}
-                  {/*</li>*/}
-                  {/*<li className="text-dark mb-5">*/}
-                  {/*<strong>My Balance:</strong> <strong>{user.balance}</strong>*/}
-                  {/*</li>*/}
-
                   <li>
                     <div className="d-inline-block rif-card text-left">
                       <div className="front">
@@ -130,93 +141,185 @@ const MyProfile = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>10-02-2019</td>
-                      <td className="text-center">1</td>
-                      <td className="text-center text-primary">Deposit</td>
-                    </tr>
-                    <tr>
-                      <td>10-03-2019</td>
-                      <td className="text-center">2</td>
-                      <td className="text-center text-secondary">Withdraw</td>
-                    </tr>
+                    {renderHistory(user && user.history ? user.history : [])}
                   </tbody>
                 </Table>
               </Col>
             </Row>
           )}
 
-          <Modal show={show} onHide={handleCloseWithdraw}>
+          <Modal show={show} onHide={() => handleCloseWithdraw(resetMessage)}>
             <Modal.Header closeButton>
               <Modal.Title>
                 <strong>Make a Withdraw</strong>
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <InputGroup className="mb-3">
-                <FormControl
-                  placeholder="Amount"
-                  aria-label="Amount"
-                  aria-describedby="basic-addon2"
-                  onChange={e => setValue(parseInt(e.target.value, 10))}
-                />
-                <InputGroup.Append>
-                  <Button
-                    variant="secondary"
-                    className="py-0"
-                    onClick={() => handleModalButton(withdrawBalance)}
+              {!message && (
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="Amount"
+                    aria-label="Amount"
+                    aria-describedby="basic-addon2"
+                    onChange={e => setValue(parseInt(e.target.value, 10))}
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      variant="secondary"
+                      className="py-0"
+                      onClick={() => handleModalButton(withdrawBalance)}
+                    >
+                      Withdraw
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
+              )}
+
+              {message && (
+                <div className="d-block text-center my-2">
+                  {success ? (
+                    <div className="mb-2">
+                      <svg
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fal"
+                        data-icon="check-circle"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        className="svgMsg"
+                      >
+                        <path
+                          fill="#53c676"
+                          d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 464c-118.664 0-216-96.055-216-216 0-118.663 96.055-216 216-216 118.664 0 216 96.055 216 216 0 118.663-96.055 216-216 216zm141.63-274.961L217.15 376.071c-4.705 4.667-12.303 4.637-16.97-.068l-85.878-86.572c-4.667-4.705-4.637-12.303.068-16.97l8.52-8.451c4.705-4.667 12.303-4.637 16.97.068l68.976 69.533 163.441-162.13c4.705-4.667 12.303-4.637 16.97.068l8.451 8.52c4.668 4.705 4.637 12.303-.068 16.97z"
+                          className=""
+                        ></path>
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="mb-2">
+                      <svg
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fal"
+                        data-icon="times-circle"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        className="svgMsg"
+                      >
+                        <path
+                          fill="#d93528"
+                          d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 464c-118.7 0-216-96.1-216-216 0-118.7 96.1-216 216-216 118.7 0 216 96.1 216 216 0 118.7-96.1 216-216 216zm94.8-285.3L281.5 256l69.3 69.3c4.7 4.7 4.7 12.3 0 17l-8.5 8.5c-4.7 4.7-12.3 4.7-17 0L256 281.5l-69.3 69.3c-4.7 4.7-12.3 4.7-17 0l-8.5-8.5c-4.7-4.7-4.7-12.3 0-17l69.3-69.3-69.3-69.3c-4.7-4.7-4.7-12.3 0-17l8.5-8.5c4.7-4.7 12.3-4.7 17 0l69.3 69.3 69.3-69.3c4.7-4.7 12.3-4.7 17 0l8.5 8.5c4.6 4.7 4.6 12.3 0 17z"
+                          className=""
+                        ></path>
+                      </svg>
+                    </div>
+                  )}
+                  <span
+                    className={`text-${
+                      success ? "secondary" : "danger"
+                    } font-weight-bold`}
                   >
-                    Withdraw
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-              <div className="{myClass}">
-                <span className="text-secondary font-weight-bold">
-                  Transaction Success
-                </span>
-              </div>
+                    {message}
+                  </span>
+                </div>
+              )}
             </Modal.Body>
             <Modal.Footer>
               <Button
                 variant="dark"
                 className="mx-auto"
-                onClick={handleCloseWithdraw}
+                onClick={() => handleCloseWithdraw(resetMessage)}
               >
                 Close
               </Button>
             </Modal.Footer>
           </Modal>
 
-          <Modal show={showD} onHide={handleCloseDeposit}>
+          <Modal show={showD} onHide={() => handleCloseDeposit(resetMessage)}>
             <Modal.Header closeButton>
               <Modal.Title>
                 <strong>Make a Deposit</strong>
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <InputGroup className="mb-3">
-                <FormControl
-                  placeholder="Amount"
-                  aria-label="Amount"
-                  aria-describedby="basic-addon2"
-                  onChange={e => setValue(parseInt(e.target.value, 10))}
-                />
-                <InputGroup.Append>
-                  <Button
-                    variant="primary"
-                    className="py-0"
-                    onClick={() => handleModalButton(depositBalance)}
+              {!message && (
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="Amount"
+                    aria-label="Amount"
+                    aria-describedby="basic-addon2"
+                    onChange={e => setValue(parseInt(e.target.value, 10))}
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      variant="primary"
+                      className="py-0"
+                      onClick={() => handleModalButton(depositBalance)}
+                    >
+                      Deposit
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
+              )}
+              {message && (
+                <div className="d-block text-center my-2">
+                  {success ? (
+                    <div className="mb-2">
+                      <svg
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fal"
+                        data-icon="check-circle"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        className="svgMsg"
+                      >
+                        <path
+                          fill="#53c676"
+                          d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 464c-118.664 0-216-96.055-216-216 0-118.663 96.055-216 216-216 118.664 0 216 96.055 216 216 0 118.663-96.055 216-216 216zm141.63-274.961L217.15 376.071c-4.705 4.667-12.303 4.637-16.97-.068l-85.878-86.572c-4.667-4.705-4.637-12.303.068-16.97l8.52-8.451c4.705-4.667 12.303-4.637 16.97.068l68.976 69.533 163.441-162.13c4.705-4.667 12.303-4.637 16.97.068l8.451 8.52c4.668 4.705 4.637 12.303-.068 16.97z"
+                          className=""
+                        ></path>
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="mb-2">
+                      <svg
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fal"
+                        data-icon="times-circle"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        className="svgMsg"
+                      >
+                        <path
+                          fill="#d93528"
+                          d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 464c-118.7 0-216-96.1-216-216 0-118.7 96.1-216 216-216 118.7 0 216 96.1 216 216 0 118.7-96.1 216-216 216zm94.8-285.3L281.5 256l69.3 69.3c4.7 4.7 4.7 12.3 0 17l-8.5 8.5c-4.7 4.7-12.3 4.7-17 0L256 281.5l-69.3 69.3c-4.7 4.7-12.3 4.7-17 0l-8.5-8.5c-4.7-4.7-4.7-12.3 0-17l69.3-69.3-69.3-69.3c-4.7-4.7-4.7-12.3 0-17l8.5-8.5c4.7-4.7 12.3-4.7 17 0l69.3 69.3 69.3-69.3c4.7-4.7 12.3-4.7 17 0l8.5 8.5c4.6 4.7 4.6 12.3 0 17z"
+                          className=""
+                        ></path>
+                      </svg>
+                    </div>
+                  )}
+
+                  <span
+                    className={`text-${
+                      success ? "secondary" : "danger"
+                    } font-weight-bold`}
                   >
-                    Deposit
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
+                    {message}
+                  </span>
+                </div>
+              )}
             </Modal.Body>
             <Modal.Footer>
               <Button
                 variant="dark"
                 className="mx-auto"
-                onClick={handleCloseDeposit}
+                onClick={() => handleCloseDeposit(resetMessage)}
               >
                 Close
               </Button>

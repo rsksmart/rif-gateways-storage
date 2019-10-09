@@ -254,3 +254,8 @@
     font-weight: normal;
     font-style: normal;
 }
+
+/* SVG */
+.svgMsg {
+    width: 50px;
+}
