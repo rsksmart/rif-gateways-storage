@@ -3,25 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "24.0.18",
-    "@types/node": "12.7.2",
-    "@types/react": "16.9.2",
     "bootstrap": "^4.3.1",
-    "react": "^16.9.0",
+    "react": "^16.10.2",
     "react-bootstrap": "^1.0.0-beta.12",
-    "react-dom": "^16.9.0",
-    "react-dropzone": "^10.1.8",
-    "react-router": "^5.0.1",
+    "react-dom": "^16.10.2",
+    "react-dropzone": "^10.1.10",
+    "react-router": "^5.1.2",
     "react-router-bootstrap": "^0.25.0",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.1",
-    "typescript": "3.5.3"
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.2.0",
+    "typescript": "3.6.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "tslint": "tslint 'src/**/*.ts*'",
+    "prettify": "prettier --single-quote --write 'src/**/*.ts*'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,8 +37,17 @@
     ]
   },
   "devDependencies": {
-    "@types/react-dom": "^16.9.0",
+    "@types/jest": "24.0.18",
+    "@types/node": "12.7.12",
+    "@types/react": "16.9.5",
+    "@types/react-dom": "^16.9.1",
     "@types/react-router-bootstrap": "^0.24.5",
-    "@types/react-router-dom": "^4.3.5"
+    "@types/react-router-dom": "^5.1.0",
+    "prettier": "^1.18.2",
+    "tslint": "^5.20.0",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "tslint-react": "^4.1.0"
   }
 }
