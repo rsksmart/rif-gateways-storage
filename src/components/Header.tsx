@@ -29,9 +29,6 @@ export default () => (
         <LinkContainer to={ROUTES.SETTINGS}>
           <Nav.Link>Settings</Nav.Link>
         </LinkContainer>
-          <LinkContainer to={ROUTES.PROFILE}>
-              <Nav.Link>My Profile</Nav.Link>
-          </LinkContainer>
         <Web3Provider.Consumer>
           {({ state: { user }, actions: { lock, unlock } }) => (
             <div>
@@ -41,7 +38,14 @@ export default () => (
                 </Button>
               )}
               {user && user.address && (
-                <NavDropdown title={`${user.address}`} id="basic-nav-dropdown" drop='left'>
+                <NavDropdown
+                  title={`${user.address}`}
+                  id="basic-nav-dropdown"
+                  drop="left"
+                >
+                  <LinkContainer to={ROUTES.PROFILE}>
+                    <Nav.Link>My Profile</Nav.Link>
+                  </LinkContainer>
                   <NavDropdown.Item>View wallet</NavDropdown.Item>
                   <NavDropdown.Item
                     href={`https://explorer.rsk.co/address/${user.address}`}

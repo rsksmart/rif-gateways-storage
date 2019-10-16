@@ -8,7 +8,6 @@ import {
   Modal,
   InputGroup,
   FormControl,
-  Tabs,
   Tab,
   Nav
 } from "react-bootstrap";
@@ -126,7 +125,16 @@ const MyProfile = () => {
                                 <path d="M7.584 11.438c.227.031.438.144.594.312 2.953 2.863 4.781 6.875 4.781 11.313 0 4.433-1.828 8.449-4.781 11.312-.398.387-1.035.383-1.422-.016-.387-.398-.383-1.035.016-1.421 2.582-2.504 4.187-5.993 4.187-9.875 0-3.883-1.605-7.372-4.187-9.875-.321-.282-.426-.739-.266-1.133.164-.395.559-.641.984-.617h.094zM1.178 15.531c.121.02.238.063.344.125 2.633 1.414 4.437 4.215 4.437 7.407 0 3.195-1.797 5.996-4.437 7.406-.492.258-1.102.07-1.36-.422-.257-.492-.07-1.102.422-1.359 2.012-1.075 3.375-3.176 3.375-5.625 0-2.446-1.371-4.551-3.375-5.625-.441-.204-.676-.692-.551-1.165.122-.468.567-.785 1.051-.742h.094z"></path>
                               </svg>
                               <div className="card-number">
-                                <div className="section">{user.address}</div>
+                                <div className="section">
+                                  <Nav.Link
+                                    target="blank"
+                                    href={`https://explorer.rsk.co/address/${user.address}`}
+                                  >
+                                    {user.address.slice(0, 9)}
+                                    ....
+                                    {user.address.slice(33, 42)}
+                                  </Nav.Link>
+                                </div>
                               </div>
 
                               <div className="card-holder">
@@ -193,7 +201,16 @@ const MyProfile = () => {
                                 <path d="M7.584 11.438c.227.031.438.144.594.312 2.953 2.863 4.781 6.875 4.781 11.313 0 4.433-1.828 8.449-4.781 11.312-.398.387-1.035.383-1.422-.016-.387-.398-.383-1.035.016-1.421 2.582-2.504 4.187-5.993 4.187-9.875 0-3.883-1.605-7.372-4.187-9.875-.321-.282-.426-.739-.266-1.133.164-.395.559-.641.984-.617h.094zM1.178 15.531c.121.02.238.063.344.125 2.633 1.414 4.437 4.215 4.437 7.407 0 3.195-1.797 5.996-4.437 7.406-.492.258-1.102.07-1.36-.422-.257-.492-.07-1.102.422-1.359 2.012-1.075 3.375-3.176 3.375-5.625 0-2.446-1.371-4.551-3.375-5.625-.441-.204-.676-.692-.551-1.165.122-.468.567-.785 1.051-.742h.094z"></path>
                               </svg>
                               <div className="card-number">
-                                <div className="section">{user.address}</div>
+                                <div className="section">
+                                  <Nav.Link
+                                    target="blank"
+                                    href={`https://explorer.rsk.co/address/${user.address}`}
+                                  >
+                                    {user.address.slice(0, 9)}
+                                    ....
+                                    {user.address.slice(33, 42)}
+                                  </Nav.Link>
+                                </div>
                               </div>
 
                               <div className="card-holder">
@@ -255,6 +272,7 @@ const MyProfile = () => {
             <Modal.Body>
               {!message && (
                 <div>
+                    <h4 className="text-center">Your Balance: <strong>{user.balance}</strong></h4>
                   <InputGroup className="mb-3">
                     <InputGroup.Append>
                       <FormControl
@@ -268,7 +286,6 @@ const MyProfile = () => {
                     <FormControl
                       placeholder="Amount"
                       aria-label="Amount"
-                      aria-describedby="basic-addon2"
                       onChange={e => setValue(parseInt(e.target.value, 10))}
                     />
                   </InputGroup>
@@ -345,7 +362,8 @@ const MyProfile = () => {
             <Modal.Body>
               {!message && (
                 <div>
-                  <InputGroup className="mb-3">
+                    <h4 className="text-center">Your Balance: <strong>{user.balance}</strong></h4>
+                    <InputGroup className="mb-3">
                     <InputGroup.Append>
                       <FormControl
                         as="select"
@@ -358,7 +376,6 @@ const MyProfile = () => {
                     <FormControl
                       placeholder="Amount"
                       aria-label="Amount"
-                      aria-describedby="basic-addon2"
                       onChange={e => setValue(parseInt(e.target.value, 10))}
                     />
                   </InputGroup>

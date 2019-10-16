@@ -1,4 +1,5 @@
 import Transaction from "models/Transaction";
+import Token from "models/Token";
 
 export interface IUserParams {
   address: string;

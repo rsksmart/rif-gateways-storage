@@ -1,7 +1,7 @@
 import React, { Component, createContext } from "react";
 
 import User from "models/User";
-import Transaction from "../models/Transaction";
+import Transaction from "models/Transaction";
 
 export interface IWeb3Provider {
   state: {
