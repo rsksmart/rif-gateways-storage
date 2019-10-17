@@ -104,7 +104,7 @@ const MyProfile = () => {
                               </svg>
 
                               <div className="investor">
-                                Balance: <strong>{user.balance}</strong>
+                                Balance: <strong>{user.balances[0].balance}</strong>
                               </div>
                               <div className="chip">
                                 <div className="chip-line"></div>
@@ -180,7 +180,7 @@ const MyProfile = () => {
                               </svg>
 
                               <div className="investor">
-                                Balance: <strong>{user.balance}</strong>
+                                Balance: <strong>{user.balances[0].balance}</strong>
                               </div>
                               <div className="chip">
                                 <div className="chip-line"></div>
@@ -272,7 +272,7 @@ const MyProfile = () => {
             <Modal.Body>
               {!message && (
                 <div>
-                    <h4 className="text-center">Your Balance: <strong>{user.balance}</strong></h4>
+                    <h4 className="text-center">Your Balance: <strong>{user.balances[0].balance}</strong></h4>
                   <InputGroup className="mb-3">
                     <InputGroup.Append>
                       <FormControl
@@ -362,7 +362,7 @@ const MyProfile = () => {
             <Modal.Body>
               {!message && (
                 <div>
-                    <h4 className="text-center">Your Balance: <strong>{user.balance}</strong></h4>
+                    <h4 className="text-center">Your Balance: <strong>{user.balances[0].balance}</strong></h4>
                     <InputGroup className="mb-3">
                     <InputGroup.Append>
                       <FormControl

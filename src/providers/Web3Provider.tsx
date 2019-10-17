@@ -12,12 +12,9 @@ export interface IWeb3Provider {
   actions: {
     lock: () => void;
     unlock: () => void;
-    setAddress: (address: string) => void;
-    setRskAddress: (rskAddress: string) => void;
-    getAddress: () => void;
-    depositBalance: (deposit: number) => void;
-    withdrawBalance: (value: number) => void;
-    setBalance: (balance: number) => void;
+
+    depositBalance: (deposit: number, tokenAddress: string) => void;
+    withdrawBalance: (value: number, tokenAddress: string) => void;
     resetMessage: () => void;
   };
 }
@@ -26,19 +23,15 @@ const { Provider, Consumer } = createContext<IWeb3Provider>({
   actions: {
     lock: () => {},
     unlock: () => {},
-    setAddress: () => {},
-    setRskAddress: () => {},
-    getAddress: () => {},
     depositBalance: () => {},
     withdrawBalance: () => {},
-    setBalance: () => {},
     resetMessage: () => {}
   },
   state: {
     user: {
       address: "",
       rskAddress: "",
-      balance: 0,
+      balances: [],
       history: []
     },
     success: false,
@@ -61,7 +54,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
       user: {
         address: "",
         rskAddress: "",
-        balance: 0,
+        balances: [],
         history: []
       },
       success: false,
@@ -83,12 +76,12 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
   addTransactionItem(date, amount, type) {
     const transaction = new Transaction({ date, amount, type });
     const { user } = this.state;
-    const { address, rskAddress, balance, history } = user;
+    const { address, rskAddress, balances, history } = user;
     const newHistory = history.concat(transaction);
     const newUser = new User({
       address,
       rskAddress,
-      balance,
+      balances,
       history: newHistory
     });
 
@@ -97,32 +90,44 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     });
   }
 
-  depositBalance(deposit) {
+  depositBalance(deposit, tokenAddress) {
     const { user } = this.state;
-    const { address, rskAddress, balance, history } = user;
+    const { address, rskAddress, balances, history } = user;
+    const newBalances = balances.map(t =>
+      t.tokenAddress === tokenAddress
+        ? { ...t, balance: t.balance + deposit }
+        : t
+    );
     const newUser = new User({
       address,
       rskAddress,
-      balance: balance + deposit,
+      balances: newBalances,
       history
     });
     this.setState({ user: newUser }, () => {
-      return this.addTransactionItem(new Date().toDateString(), deposit, "Deposit");
+      return this.addTransactionItem(
+        new Date().toDateString(),
+        deposit,
+        "Deposit"
+      );
     });
 
     return this.setState({ success: true, message: "Transaction Success" });
   }
 
-  withdrawBalance(value) {
+  withdrawBalance(value, tokenAddress) {
     const { user } = this.state;
-    const { address, rskAddress, balance, history } = user;
+    const { address, rskAddress, balances, history } = user;
+    const newBalances = balances.map(t =>
+      t.tokenAddress === tokenAddress ? { ...t, balance: t.balance - value } : t
+    );
     const newUser = new User({
       address,
       rskAddress,
-      balance: balance - value,
+      balances: newBalances,
       history
     });
-    if (balance >= value) {
+    if (balances >= value) {
       this.setState({ user: newUser }, () => {
         this.addTransactionItem(new Date().toDateString(), value, "Withdraw");
         return this.setState({ success: true, message: "Transaction Success" });
@@ -132,12 +137,12 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     }
   }
 
-  setBalance(balance) {
+  setBalance(balances) {
     const { user } = this.state;
     const { address, rskAddress, history } = user;
-    const newUser = new User({ address, rskAddress, balance, history });
+    const newUser = new User({ address, rskAddress, balances, history });
     this.setState({ user: newUser }, () => {
-      return balance;
+      return balances;
     });
   }
 
@@ -147,8 +152,8 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
 
   setRskAddress(rskAddress) {
     const { user } = this.state;
-    const { address, balance, history } = user;
-    const newUser = new User({ address, rskAddress, balance, history });
+    const { address, balances, history } = user;
+    const newUser = new User({ address, rskAddress, balances, history });
     this.setState({ user: newUser }, () => {
       return rskAddress;
     });
@@ -156,8 +161,8 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
 
   setAddress(address) {
     const { user } = this.state;
-    const { rskAddress, balance, history } = user;
-    const newUser = new User({ address, rskAddress, balance, history });
+    const { rskAddress, balances, history } = user;
+    const newUser = new User({ address, rskAddress, balances, history });
     this.setState({ user: newUser }, () => {
       return address;
     });
@@ -174,7 +179,12 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
   lock() {
     this.setState(
       {
-        user: new User({ address: "", rskAddress: "", balance: 0, history: [] })
+        user: new User({
+          address: "",
+          rskAddress: "",
+          balances: [],
+          history: []
+        })
       },
       () => {
         console.debug("Wallet locked");
@@ -188,7 +198,13 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
         user: new User({
           address: "0xD856FA8E0b978da6d8D5C3FC3DfE177b39b501f7",
           rskAddress: "john.rsk",
-          balance: 20,
+          balances: [
+            {
+              balance: 20,
+              hold: 0,
+              tokenAddress: "0xD856FA8E0b978da6d8D5C3FC3DfE177b39b501f7"
+            }
+          ],
           history: []
         })
       },
@@ -203,10 +219,6 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     const {
       lock,
       unlock,
-      setAddress,
-      getAddress,
-      setRskAddress,
-      setBalance,
       depositBalance,
       withdrawBalance,
       resetMessage
@@ -218,11 +230,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
           actions: {
             lock,
             unlock,
-            setAddress,
-            getAddress,
             withdrawBalance,
-            setRskAddress,
-            setBalance,
             depositBalance,
             resetMessage
           },
