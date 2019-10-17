@@ -2,6 +2,7 @@ import React, { Component, createContext } from "react";
 
 import User from "models/User";
 import Transaction from "models/Transaction";
+import Token, { ETokenName } from "models/Token";
 
 export interface IWeb3Provider {
   state: {
@@ -199,11 +200,12 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
           address: "0xD856FA8E0b978da6d8D5C3FC3DfE177b39b501f7",
           rskAddress: "john.rsk",
           balances: [
-            {
+            new Token({
               balance: 20,
               hold: 0,
-              tokenAddress: "0xD856FA8E0b978da6d8D5C3FC3DfE177b39b501f7"
-            }
+              tokenAddress: "0x2acc95758f8b5f583470ba265eb685a8f45fc9d5",
+              tokenName: ETokenName.RIF
+            })
           ],
           history: []
         })

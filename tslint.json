@@ -9,7 +9,7 @@
     "no-this-assignment": [true, { "allow-destructuring": true }],
     "no-implicit-dependencies": [
       true,
-      ["models", "providers", "views", "data", "containers", "components"]
+      ["models", "providers", "views", "rifui", "components", "routes"]
     ],
     "no-submodule-imports": false,
     "no-empty-interface": false,
