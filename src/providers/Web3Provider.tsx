@@ -68,7 +68,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     this.setRskAddress = this.setRskAddress.bind(this);
     this.depositBalance = this.depositBalance.bind(this);
     this.withdrawBalance = this.withdrawBalance.bind(this);
-    this.setBalance = this.setBalance.bind(this);
+    // this.setBalance = this.setBalance.bind(this);
     this.getAddress = this.getAddress.bind(this);
     this.resetMessage = this.resetMessage.bind(this);
     this.addTransactionItem = this.addTransactionItem.bind(this);
@@ -138,14 +138,14 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     }
   }
 
-  setBalance(balances) {
-    const { user } = this.state;
-    const { address, rskAddress, history } = user;
-    const newUser = new User({ address, rskAddress, balances, history });
-    this.setState({ user: newUser }, () => {
-      return balances;
-    });
-  }
+  // setBalance(balances) {
+  //   const { user } = this.state;
+  //   const { address, rskAddress, history } = user;
+  //   const newUser = new User({ address, rskAddress, balances, history });
+  //   this.setState({ user: newUser }, () => {
+  //     return balances;
+  //   });
+  // }
 
   resetMessage() {
     this.setState({ success: false, message: "" });

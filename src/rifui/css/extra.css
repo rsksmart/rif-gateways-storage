@@ -11,6 +11,12 @@
     color: #212529 !important;
 }
 
+.navbar .dropdown-menu .nav-link:hover{
+    color: #16181b;
+    text-decoration: none;
+    background-color: #f8f9fa;
+}
+
 .navbar .dropdown-menu .nav-link.active {
     color: #fff !important;
     text-decoration: none;
