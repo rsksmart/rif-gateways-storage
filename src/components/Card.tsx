@@ -90,7 +90,6 @@ export default class Card extends Component<CardProps, CardState> {
               </Nav.Link>
             </div>
           </div>
-
           <div className="card-holder">{rskAddress}</div>
         </div>
       </div>

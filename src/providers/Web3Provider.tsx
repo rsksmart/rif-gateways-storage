@@ -14,8 +14,16 @@ export interface IWeb3Provider {
     lock: () => void;
     unlock: () => void;
 
-    depositBalance: (deposit: number, tokenAddress: string) => void;
-    withdrawBalance: (value: number, tokenAddress: string) => void;
+    depositBalance: (
+      deposit: number,
+      tokenAddress: string,
+      currency: ETokenName
+    ) => void;
+    withdrawBalance: (
+      value: number,
+      tokenAddress: string,
+      currency: ETokenName
+    ) => void;
     resetMessage: () => void;
   };
 }
@@ -74,8 +82,8 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     this.addTransactionItem = this.addTransactionItem.bind(this);
   }
 
-  addTransactionItem(date, amount, type) {
-    const transaction = new Transaction({ date, amount, type });
+  addTransactionItem(date, amount, type, currency) {
+    const transaction = new Transaction({ date, amount, type, currency });
     const { user } = this.state;
     const { address, rskAddress, balances, history } = user;
     const newHistory = history.concat(transaction);
@@ -91,7 +99,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     });
   }
 
-  depositBalance(deposit, tokenAddress) {
+  depositBalance(deposit, tokenAddress, currency) {
     const { user } = this.state;
     const { address, rskAddress, balances, history } = user;
     const newBalances = balances.map(t =>
@@ -105,32 +113,40 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
       balances: newBalances,
       history
     });
+
     this.setState({ user: newUser }, () => {
       return this.addTransactionItem(
         new Date().toDateString(),
         deposit,
-        "Deposit"
+        "Deposit",
+        currency
       );
     });
 
     return this.setState({ success: true, message: "Transaction Success" });
   }
 
-  withdrawBalance(value, tokenAddress) {
+  withdrawBalance(value, tokenAddress, currency) {
     const { user } = this.state;
     const { address, rskAddress, balances, history } = user;
     const newBalances = balances.map(t =>
       t.tokenAddress === tokenAddress ? { ...t, balance: t.balance - value } : t
     );
+
     const newUser = new User({
       address,
       rskAddress,
       balances: newBalances,
       history
     });
-    if (balances >= value) {
+    if (balances[0].balance >= value) {
       this.setState({ user: newUser }, () => {
-        this.addTransactionItem(new Date().toDateString(), value, "Withdraw");
+        this.addTransactionItem(
+          new Date().toDateString(),
+          value,
+          "Withdraw",
+          currency
+        );
         return this.setState({ success: true, message: "Transaction Success" });
       });
     } else {
