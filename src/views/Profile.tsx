@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import CheckSVG from "../images/check.svg";
-import ErrorSVG from "../images/error.svg";
+import Moment from "moment";
+import CheckSVG from "../rifui/assets/check.svg";
+import ErrorSVG from "../rifui/assets/error.svg";
 import { ETokenName } from "models/Token";
-
 import {
   Container,
   Row,
@@ -21,7 +21,7 @@ import Card from "../components/Card";
 const renderHistory = history => {
   return history.map((item, index) => (
     <tr key={index}>
-      <td>{item.date}</td>
+      <td>{Moment(item.date).format("L")}</td>
       <td className="text-center">{item.currency} </td>
       <td className="text-center">{item.amount}</td>
       <td
@@ -160,6 +160,7 @@ const MyProfile = () => {
             </Row>
           )}
 
+          {/* WITHDRAW MODAL */}
           <Modal show={show} onHide={() => handleCloseWithdraw(resetMessage)}>
             <Modal.Header closeButton>
               <Modal.Title>
@@ -228,6 +229,7 @@ const MyProfile = () => {
             </Modal.Body>
           </Modal>
 
+          {/* DEPOSIT MODAL */}
           <Modal show={showD} onHide={() => handleCloseDeposit(resetMessage)}>
             <Modal.Header closeButton>
               <Modal.Title>
@@ -237,9 +239,6 @@ const MyProfile = () => {
             <Modal.Body>
               {!message && (
                 <div>
-                  <h4 className="text-center">
-                    Your Balance: <strong>{user.balances[0].balance}</strong>
-                  </h4>
                   <InputGroup className="mb-3">
                     <InputGroup.Append>
                       <FormControl
