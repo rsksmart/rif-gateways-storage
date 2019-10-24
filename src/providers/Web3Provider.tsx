@@ -150,7 +150,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
         return this.setState({ success: true, message: "Transaction Success" });
       });
     } else {
-      return this.setState({ success: false, message: "Transaction Fail" });
+      return this.setState({ success: false, message: "You don’t have enough balance" });
     }
   }
 

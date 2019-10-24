@@ -168,64 +168,63 @@ const MyProfile = () => {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {!message && (
-                <div>
-                  <h4 className="text-center">
-                    Your Balance: <strong>{user.balances[0].balance}</strong>
-                  </h4>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Append>
-                      <FormControl
-                        as="select"
-                        className="custom-select select-currency"
-                        onChange={handleCurrencySelect}
-                      >
-                        <option>RIF</option>
-                        <option>RBTC</option>
-                      </FormControl>
-                    </InputGroup.Append>
-                    <FormControl
-                      placeholder="Amount"
-                      aria-label="Amount"
-                      onChange={e => setValue(parseInt(e.target.value, 10))}
-                    />
-                  </InputGroup>
-                  <div className="text-center">
-                    <Button
-                      variant="secondary"
-                      onClick={() =>
-                        handleModalButton(
-                          withdrawBalance,
-                          user.balances[0].tokenAddress
-                        )
-                      }
+              <div>
+                {message && (
+                  <div className="d-block text-center my-2">
+                    {success ? (
+                      <div className="mb-2">
+                        <img src={CheckSVG} alt="" style={{ maxWidth: 40 }} />
+                      </div>
+                    ) : (
+                      <div className="mb-2">
+                        <img src={ErrorSVG} alt="" style={{ maxWidth: 40 }} />
+                      </div>
+                    )}
+                    <span
+                      className={`text-${
+                        success ? "secondary" : "danger"
+                      } font-weight-bold`}
                     >
-                      Withdraw
-                    </Button>
+                      {message}
+                    </span>
                   </div>
-                </div>
-              )}
+                )}
 
-              {message && (
-                <div className="d-block text-center my-2">
-                  {success ? (
-                    <div className="mb-2">
-                      <img src={CheckSVG} alt="" style={{ maxWidth: 40 }} />
-                    </div>
-                  ) : (
-                    <div className="mb-2">
-                      <img src={ErrorSVG} alt="" style={{ maxWidth: 40 }} />
-                    </div>
-                  )}
-                  <span
-                    className={`text-${
-                      success ? "secondary" : "danger"
-                    } font-weight-bold`}
+                <h4 className="text-center">
+                  Your Current Balance:{" "}
+                  <strong>{user.balances[0].balance}</strong>
+                </h4>
+                <InputGroup className="mb-3">
+                  <InputGroup.Append>
+                    <FormControl
+                      as="select"
+                      className="custom-select select-currency"
+                      onChange={handleCurrencySelect}
+                    >
+                      <option>RIF</option>
+                      <option>RBTC</option>
+                    </FormControl>
+                  </InputGroup.Append>
+                  <FormControl
+                    placeholder="Amount"
+                    aria-label="Amount"
+                    onChange={e => setValue(parseInt(e.target.value, 10))}
+                  />
+                </InputGroup>
+                <div className="text-center">
+                  <Button
+                    variant="secondary"
+                    onClick={() =>
+                      handleModalButton(
+                        withdrawBalance,
+                        user.balances[0].tokenAddress
+                      )
+                    }
                   >
-                    {message}
-                  </span>
+                    Withdraw
+                  </Button>
                 </div>
-              )}
+              </div>
             </Modal.Body>
           </Modal>
 
@@ -237,61 +236,59 @@ const MyProfile = () => {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {!message && (
-                <div>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Append>
-                      <FormControl
-                        as="select"
-                        className="custom-select select-currency"
-                        onChange={handleCurrencySelect}
-                      >
-                        <option>RIF</option>
-                        <option>RBTC</option>
-                      </FormControl>
-                    </InputGroup.Append>
-                    <FormControl
-                      placeholder="Amount"
-                      aria-label="Amount"
-                      onChange={e => setValue(parseInt(e.target.value, 10))}
-                    />
-                  </InputGroup>
-                  <div className="text-center">
-                    <Button
-                      variant="primary"
-                      onClick={() =>
-                        handleModalButton(
-                          depositBalance,
-                          user.balances[0].tokenAddress
-                        )
-                      }
-                    >
-                      Deposit
-                    </Button>
-                  </div>
-                </div>
-              )}
-              {message && (
-                <div className="d-block text-center my-2">
-                  {success ? (
-                    <div className="mb-2">
-                      <img src={CheckSVG} alt="" style={{ maxWidth: 40 }} />
-                    </div>
-                  ) : (
-                    <div className="mb-2">
-                      <img src={ErrorSVG} alt="" style={{ maxWidth: 40 }} />
-                    </div>
-                  )}
+              <div>
+                {message && (
+                  <div className="d-block text-center my-2">
+                    {success ? (
+                      <div className="mb-2">
+                        <img src={CheckSVG} alt="" style={{ maxWidth: 40 }} />
+                      </div>
+                    ) : (
+                      <div className="mb-2">
+                        <img src={ErrorSVG} alt="" style={{ maxWidth: 40 }} />
+                      </div>
+                    )}
 
-                  <span
-                    className={`text-${
-                      success ? "secondary" : "danger"
-                    } font-weight-bold`}
+                    <span
+                      className={`text-${
+                        success ? "secondary" : "danger"
+                      } font-weight-bold`}
+                    >
+                      {message}
+                    </span>
+                  </div>
+                )}
+                <InputGroup className="mb-3">
+                  <InputGroup.Append>
+                    <FormControl
+                      as="select"
+                      className="custom-select select-currency"
+                      onChange={handleCurrencySelect}
+                    >
+                      <option>RIF</option>
+                      <option>RBTC</option>
+                    </FormControl>
+                  </InputGroup.Append>
+                  <FormControl
+                    placeholder="Amount"
+                    aria-label="Amount"
+                    onChange={e => setValue(parseInt(e.target.value, 10))}
+                  />
+                </InputGroup>
+                <div className="text-center">
+                  <Button
+                    variant="primary"
+                    onClick={() =>
+                      handleModalButton(
+                        depositBalance,
+                        user.balances[0].tokenAddress
+                      )
+                    }
                   >
-                    {message}
-                  </span>
+                    Deposit
+                  </Button>
                 </div>
-              )}
+              </div>
             </Modal.Body>
           </Modal>
         </Container>
