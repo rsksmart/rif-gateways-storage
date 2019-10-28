@@ -339,3 +339,22 @@
 .custom-tabs .nav-link.active:hover {
     color: #53c676;
 }
+
+/* MEDIA QUERIES */
+
+@media (max-width: 460px) {
+    .rif-card,
+    .rsk-card {
+        width: 345px;
+        height: 220px;
+    }
+
+    .card-number {
+        font-size: 19px;
+        margin-bottom: 15px;
+    }
+
+    .card-holder {
+        margin: 0 20px;
+    }
+}

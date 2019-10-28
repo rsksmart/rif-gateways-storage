@@ -70,7 +70,7 @@ const MyProfile = () => {
         state: { user, success, message },
         actions: { depositBalance, withdrawBalance, resetMessage }
       }) => (
-        <Container className="py-5">
+        <div className="py-5">
           <h1 className="text-center mb-5">My Profile</h1>
           {user && user.address && (
             <Row className="justify-content-md-center">
@@ -140,7 +140,7 @@ const MyProfile = () => {
                 </Tab.Container>
               </Col>
               <Col>
-                <h3 className="text-center mb-3 font-weight-bold">
+                <h3 className="text-center mb-3 font-weight-bold mt-5 mt-sm-0">
                   Transactions History
                 </h3>
                 <Table responsive striped borderless={true} hover size="sm">
@@ -291,7 +291,7 @@ const MyProfile = () => {
               </div>
             </Modal.Body>
           </Modal>
-        </Container>
+        </div>
       )}
     </Web3Provider.Consumer>
   );
