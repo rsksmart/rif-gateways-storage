@@ -4,13 +4,13 @@ import CheckSVG from "../rifui/assets/check.svg";
 import ErrorSVG from "../rifui/assets/error.svg";
 import { ETokenName } from "models/Token";
 import {
-  Container,
   Row,
   Col,
   Button,
   Table,
   Modal,
   InputGroup,
+  Form,
   FormControl,
   Tab,
   Nav
@@ -21,7 +21,10 @@ import Card from "../components/Card";
 const renderHistory = history => {
   return history.map((item, index) => (
     <tr key={index}>
-      <td>{Moment(item.date).format("L")}</td>
+      <td>
+        {/*{item.date}*/}
+        {Moment(new Date(item.date)).format("MM/DD/YYYY")}
+      </td>
       <td className="text-center">{item.currency} </td>
       <td className="text-center">{item.amount}</td>
       <td
@@ -75,10 +78,7 @@ const MyProfile = () => {
           {user && user.address && (
             <Row className="justify-content-md-center">
               <Col lg="auto" className="text-center">
-                <Tab.Container
-                  id="left-tabs-example"
-                  defaultActiveKey="rif-tab"
-                >
+                <Tab.Container id="currency-tabs" defaultActiveKey="rif-tab">
                   <Nav
                     variant="tabs"
                     className="justify-content-center custom-tabs d-inline-flex"
@@ -95,10 +95,10 @@ const MyProfile = () => {
                     <li>
                       <Tab.Content>
                         <Tab.Pane eventKey="rif-tab">
-                          {user.balances.map((b, index) => (
+                          {user.tokens.map((b, index) => (
                             <Card
                               key={index}
-                              balance={b.balance}
+                              balance={b.balance[ETokenName.RIF]}
                               rskAddress={user.rskAddress}
                               address={user.address}
                               type="rif-card"
@@ -106,10 +106,10 @@ const MyProfile = () => {
                           ))}
                         </Tab.Pane>
                         <Tab.Pane eventKey="rbtc-tab">
-                          {user.balances.map((b, index) => (
+                          {user.tokens.map((b, index) => (
                             <Card
                               key={index}
-                              balance={b.balance}
+                              balance={b.balance[ETokenName.RBTC]}
                               rskAddress={user.rskAddress}
                               address={user.address}
                               type="rsk-card"
@@ -171,30 +171,26 @@ const MyProfile = () => {
               <div>
                 {message && (
                   <div className="d-block text-center my-2">
-                    {success ? (
+                    {success && (
                       <div className="mb-2">
                         <img src={CheckSVG} alt="" style={{ maxWidth: 40 }} />
-                      </div>
-                    ) : (
-                      <div className="mb-2">
-                        <img src={ErrorSVG} alt="" style={{ maxWidth: 40 }} />
+                        <p
+                          className={`text-${
+                            success ? "secondary" : "danger"
+                          } font-weight-bold`}
+                        >
+                          {message}
+                        </p>
                       </div>
                     )}
-                    <span
-                      className={`text-${
-                        success ? "secondary" : "danger"
-                      } font-weight-bold`}
-                    >
-                      {message}
-                    </span>
                   </div>
                 )}
 
                 <h4 className="text-center">
                   Your Current Balance:{" "}
-                  <strong>{user.balances[0].balance}</strong>
+                  <strong>{user.tokens[0].balance}</strong>
                 </h4>
-                <InputGroup className="mb-3">
+                <InputGroup className="mb-0">
                   <InputGroup.Append>
                     <FormControl
                       as="select"
@@ -206,18 +202,28 @@ const MyProfile = () => {
                     </FormControl>
                   </InputGroup.Append>
                   <FormControl
+                    type="number"
                     placeholder="Amount"
                     aria-label="Amount"
                     onChange={e => setValue(parseInt(e.target.value, 10))}
                   />
                 </InputGroup>
-                <div className="text-center">
+                {message && (
+                  <div className="text-right">
+                    {!success && (
+                      <Form.Text className="text-danger">{message}</Form.Text>
+                    )}
+                  </div>
+                )}
+
+                <div className="text-center mt-3">
                   <Button
+                    disabled={!value}
                     variant="secondary"
                     onClick={() =>
                       handleModalButton(
                         withdrawBalance,
-                        user.balances[0].tokenAddress
+                        user.tokens[0].tokenAddress
                       )
                     }
                   >
@@ -270,6 +276,7 @@ const MyProfile = () => {
                     </FormControl>
                   </InputGroup.Append>
                   <FormControl
+                    type="number"
                     placeholder="Amount"
                     aria-label="Amount"
                     onChange={e => setValue(parseInt(e.target.value, 10))}
@@ -281,7 +288,7 @@ const MyProfile = () => {
                     onClick={() =>
                       handleModalButton(
                         depositBalance,
-                        user.balances[0].tokenAddress
+                        user.tokens[0].tokenAddress
                       )
                     }
                   >

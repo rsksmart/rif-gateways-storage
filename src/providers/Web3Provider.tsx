@@ -2,6 +2,7 @@ import React, { Component, createContext } from "react";
 
 import User from "models/User";
 import Transaction from "models/Transaction";
+import BalancesTypes from "models/BalancesTypes";
 import Token, { ETokenName } from "models/Token";
 
 export interface IWeb3Provider {
@@ -40,7 +41,7 @@ const { Provider, Consumer } = createContext<IWeb3Provider>({
     user: {
       address: "",
       rskAddress: "",
-      balances: [],
+      tokens: [],
       history: []
     },
     success: false,
@@ -63,7 +64,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
       user: {
         address: "",
         rskAddress: "",
-        balances: [],
+        tokens: [],
         history: []
       },
       success: false,
@@ -85,12 +86,12 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
   addTransactionItem(date, amount, type, currency) {
     const transaction = new Transaction({ date, amount, type, currency });
     const { user } = this.state;
-    const { address, rskAddress, balances, history } = user;
+    const { address, rskAddress, tokens, history } = user;
     const newHistory = history.concat(transaction);
     const newUser = new User({
       address,
       rskAddress,
-      balances,
+      tokens,
       history: newHistory
     });
 
@@ -101,16 +102,22 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
 
   depositBalance(deposit, tokenAddress, currency) {
     const { user } = this.state;
-    const { address, rskAddress, balances, history } = user;
-    const newBalances = balances.map(t =>
+    const { address, rskAddress, tokens, history } = user;
+    const newBalances = tokens.map(t =>
       t.tokenAddress === tokenAddress
-        ? { ...t, balance: t.balance + deposit }
+        ? {
+              ...t,
+              balance: {
+                  ...t.balance,
+                  [t.balance[currency]]: t.balance[currency] + deposit
+              }
+          }
         : t
     );
     const newUser = new User({
       address,
       rskAddress,
-      balances: newBalances,
+      tokens: newBalances,
       history
     });
 
@@ -128,18 +135,26 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
 
   withdrawBalance(value, tokenAddress, currency) {
     const { user } = this.state;
-    const { address, rskAddress, balances, history } = user;
-    const newBalances = balances.map(t =>
-      t.tokenAddress === tokenAddress ? { ...t, balance: t.balance - value } : t
+    const { address, rskAddress, tokens, history } = user;
+    const newTokens = tokens.map(t =>
+      t.tokenAddress === tokenAddress
+        ? {
+            ...t,
+            balance: {
+              ...t.balance,
+              [t.balance[currency]]: t.balance[currency] - value
+            }
+          }
+        : t
     );
 
     const newUser = new User({
       address,
       rskAddress,
-      balances: newBalances,
+      tokens: newTokens,
       history
     });
-    if (balances[0].balance >= value) {
+    if (tokens[0].balance[currency] >= value) {
       this.setState({ user: newUser }, () => {
         this.addTransactionItem(
           new Date().toDateString(),
@@ -150,16 +165,19 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
         return this.setState({ success: true, message: "Transaction Success" });
       });
     } else {
-      return this.setState({ success: false, message: "You don’t have enough balance" });
+      return this.setState({
+        success: false,
+        message: "You don’t have enough balance"
+      });
     }
   }
 
-  // setBalance(balances) {
+  // setBalance(tokens) {
   //   const { user } = this.state;
   //   const { address, rskAddress, history } = user;
-  //   const newUser = new User({ address, rskAddress, balances, history });
+  //   const newUser = new User({ address, rskAddress, tokens, history });
   //   this.setState({ user: newUser }, () => {
-  //     return balances;
+  //     return tokens;
   //   });
   // }
 
@@ -169,8 +187,8 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
 
   setRskAddress(rskAddress) {
     const { user } = this.state;
-    const { address, balances, history } = user;
-    const newUser = new User({ address, rskAddress, balances, history });
+    const { address, tokens, history } = user;
+    const newUser = new User({ address, rskAddress, tokens, history });
     this.setState({ user: newUser }, () => {
       return rskAddress;
     });
@@ -178,8 +196,8 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
 
   setAddress(address) {
     const { user } = this.state;
-    const { rskAddress, balances, history } = user;
-    const newUser = new User({ address, rskAddress, balances, history });
+    const { rskAddress, tokens, history } = user;
+    const newUser = new User({ address, rskAddress, tokens, history });
     this.setState({ user: newUser }, () => {
       return address;
     });
@@ -199,7 +217,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
         user: new User({
           address: "",
           rskAddress: "",
-          balances: [],
+          tokens: [],
           history: []
         })
       },
@@ -215,9 +233,12 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
         user: new User({
           address: "0xD856FA8E0b978da6d8D5C3FC3DfE177b39b501f7",
           rskAddress: "john.rsk",
-          balances: [
+          tokens: [
             new Token({
-              balance: 20,
+              balance: new BalancesTypes({
+                [ETokenName.RIF]: 20,
+                [ETokenName.RBTC]: 30
+              }),
               hold: 0,
               tokenAddress: "0x2acc95758f8b5f583470ba265eb685a8f45fc9d5",
               tokenName: ETokenName.RIF

@@ -1,17 +1,19 @@
+import IBalancesTypesParams from "models/BalancesTypes";
+
 export enum ETokenName {
   RBTC = "RBTC",
   RIF = "RIF"
 }
 
 export interface ITokenParams {
-  balance: number;
+  balance: IBalancesTypesParams;
   hold: number;
   tokenAddress: string;
   tokenName: ETokenName;
 }
 
 export default class Token {
-  balance: number;
+  balance: IBalancesTypesParams;
   hold: number;
   tokenAddress: string;
   tokenName: ETokenName;
