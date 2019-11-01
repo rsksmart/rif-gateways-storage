@@ -106,11 +106,11 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     const newBalances = tokens.map(t =>
       t.tokenAddress === tokenAddress
         ? {
-              ...t,
-              balance: {
-                  ...t.balance,
-                  [t.balance[currency]]: t.balance[currency] + deposit
-              }
+            ...t,
+            balance: {
+              ...t.balance,
+                [currency]: t.balance[currency] + deposit
+            }
           }
         : t
     );
@@ -142,7 +142,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
             ...t,
             balance: {
               ...t.balance,
-              [t.balance[currency]]: t.balance[currency] - value
+              [currency]: t.balance[currency] - value
             }
           }
         : t
@@ -154,6 +154,8 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
       tokens: newTokens,
       history
     });
+
+    console.log(newUser);
     if (tokens[0].balance[currency] >= value) {
       this.setState({ user: newUser }, () => {
         this.addTransactionItem(

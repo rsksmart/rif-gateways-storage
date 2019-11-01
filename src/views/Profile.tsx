@@ -186,10 +186,6 @@ const MyProfile = () => {
                   </div>
                 )}
 
-                <h4 className="text-center">
-                  Your Current Balance:{" "}
-                  <strong>{user.tokens[0].balance}</strong>
-                </h4>
                 <InputGroup className="mb-0">
                   <InputGroup.Append>
                     <FormControl
