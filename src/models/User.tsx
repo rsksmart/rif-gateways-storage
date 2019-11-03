@@ -1,18 +1,18 @@
-import Transaction from "models/Transaction";
 import Token from "models/Token";
+import Transaction from "models/Transaction";
 
 export interface IUserParams {
   address: string;
   rskAddress: string;
-  tokens: Array<Token>;
-  history: Array<Transaction>;
+  tokens: Token[];
+  history: Transaction[];
 }
 
 export default class User {
-  address: string;
-  rskAddress: string;
-  tokens: Array<Token>;
-  history: Array<Transaction>;
+  public address: string;
+  public rskAddress: string;
+  public tokens: Token[];
+  public history: Transaction[];
 
   constructor({ address, rskAddress, tokens, history }: IUserParams) {
     this.address = address;

@@ -1,9 +1,8 @@
 import React, { Component, createContext } from "react";
 
-import User from "models/User";
-import Transaction from "models/Transaction";
-import BalancesTypes from "models/BalancesTypes";
 import Token, { ETokenName } from "models/Token";
+import Transaction from "models/Transaction";
+import User from "models/User";
 
 export interface IWeb3Provider {
   state: {
@@ -31,11 +30,11 @@ export interface IWeb3Provider {
 
 const { Provider, Consumer } = createContext<IWeb3Provider>({
   actions: {
-    lock: () => {},
-    unlock: () => {},
     depositBalance: () => {},
-    withdrawBalance: () => {},
-    resetMessage: () => {}
+    lock: () => {},
+    resetMessage: () => {},
+    unlock: () => {},
+    withdrawBalance: () => {}
   },
   state: {
     user: {
@@ -83,7 +82,39 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     this.addTransactionItem = this.addTransactionItem.bind(this);
   }
 
-  addTransactionItem(date, amount, type, currency) {
+  public render() {
+    const { user, message, success } = this.state;
+    const {
+      lock,
+      unlock,
+      depositBalance,
+      withdrawBalance,
+      resetMessage
+    } = this;
+
+    return (
+      <Provider
+        value={{
+          actions: {
+            depositBalance,
+            lock,
+            resetMessage,
+            unlock,
+            withdrawBalance
+          },
+          state: {
+            message,
+            success,
+            user
+          }
+        }}
+      >
+        {this.props.children}
+      </Provider>
+    );
+  }
+
+  private addTransactionItem(date, amount, type, currency) {
     const transaction = new Transaction({ date, amount, type, currency });
     const { user } = this.state;
     const { address, rskAddress, tokens, history } = user;
@@ -100,18 +131,15 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     });
   }
 
-  depositBalance(deposit, tokenAddress, currency) {
+  private depositBalance(deposit, tokenAddress, currency) {
     const { user } = this.state;
     const { address, rskAddress, tokens, history } = user;
     const newBalances = tokens.map(t =>
       t.tokenAddress === tokenAddress
-        ? {
+        ? new Token({
             ...t,
-            balance: {
-              ...t.balance,
-                [currency]: t.balance[currency] + deposit
-            }
-          }
+            balance: t.balance + deposit
+          })
         : t
     );
     const newUser = new User({
@@ -133,18 +161,15 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     return this.setState({ success: true, message: "Transaction Success" });
   }
 
-  withdrawBalance(value, tokenAddress, currency) {
+  private withdrawBalance(value, tokenAddress, currency) {
     const { user } = this.state;
     const { address, rskAddress, tokens, history } = user;
     const newTokens = tokens.map(t =>
       t.tokenAddress === tokenAddress
-        ? {
+        ? new Token({
             ...t,
-            balance: {
-              ...t.balance,
-              [currency]: t.balance[currency] - value
-            }
-          }
+            balance: t.balance - value
+          })
         : t
     );
 
@@ -155,7 +180,6 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
       history
     });
 
-    console.log(newUser);
     if (tokens[0].balance[currency] >= value) {
       this.setState({ user: newUser }, () => {
         this.addTransactionItem(
@@ -168,8 +192,8 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
       });
     } else {
       return this.setState({
-        success: false,
-        message: "You don’t have enough balance"
+        message: "You don’t have enough balance",
+        success: false
       });
     }
   }
@@ -183,11 +207,11 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
   //   });
   // }
 
-  resetMessage() {
+  private resetMessage() {
     this.setState({ success: false, message: "" });
   }
 
-  setRskAddress(rskAddress) {
+  private setRskAddress(rskAddress) {
     const { user } = this.state;
     const { address, tokens, history } = user;
     const newUser = new User({ address, rskAddress, tokens, history });
@@ -196,7 +220,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     });
   }
 
-  setAddress(address) {
+  private setAddress(address) {
     const { user } = this.state;
     const { rskAddress, tokens, history } = user;
     const newUser = new User({ address, rskAddress, tokens, history });
@@ -205,7 +229,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     });
   }
 
-  getAddress() {
+  private getAddress() {
     if (this.state.user) {
       return this.state.user.address;
     }
@@ -213,7 +237,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     return "No Address";
   }
 
-  lock() {
+  private lock() {
     this.setState(
       {
         user: new User({
@@ -229,7 +253,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
     );
   }
 
-  unlock() {
+  private unlock() {
     this.setState(
       {
         user: new User({
@@ -237,10 +261,7 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
           rskAddress: "john.rsk",
           tokens: [
             new Token({
-              balance: new BalancesTypes({
-                [ETokenName.RIF]: 20,
-                [ETokenName.RBTC]: 30
-              }),
+              balance: 0,
               hold: 0,
               tokenAddress: "0x2acc95758f8b5f583470ba265eb685a8f45fc9d5",
               tokenName: ETokenName.RIF
@@ -252,38 +273,6 @@ class Web3Provider extends Component<IWeb3ProviderProps, IWeb3ProviderState> {
       () => {
         console.debug("Wallet unlocked");
       }
-    );
-  }
-
-  render() {
-    const { user, message, success } = this.state;
-    const {
-      lock,
-      unlock,
-      depositBalance,
-      withdrawBalance,
-      resetMessage
-    } = this;
-
-    return (
-      <Provider
-        value={{
-          actions: {
-            lock,
-            unlock,
-            withdrawBalance,
-            depositBalance,
-            resetMessage
-          },
-          state: {
-            user,
-            message,
-            success
-          }
-        }}
-      >
-        {this.props.children}
-      </Provider>
     );
   }
 }

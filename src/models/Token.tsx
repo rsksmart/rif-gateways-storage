@@ -1,22 +1,20 @@
-import IBalancesTypesParams from "models/BalancesTypes";
-
 export enum ETokenName {
   RBTC = "RBTC",
   RIF = "RIF"
 }
 
 export interface ITokenParams {
-  balance: IBalancesTypesParams;
+  balance: number;
   hold: number;
   tokenAddress: string;
   tokenName: ETokenName;
 }
 
 export default class Token {
-  balance: IBalancesTypesParams;
-  hold: number;
-  tokenAddress: string;
-  tokenName: ETokenName;
+  public balance: number;
+  public hold: number;
+  public tokenAddress: string;
+  public tokenName: ETokenName;
 
   constructor({ balance, hold, tokenAddress, tokenName }: ITokenParams) {
     this.balance = balance;

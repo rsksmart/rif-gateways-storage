@@ -8,10 +8,10 @@ export interface ITransactionParams {
 }
 
 export default class Transaction {
-  date: Date;
-  amount: number;
-  type: string;
-  currency: ETokenName;
+  public date: Date;
+  public amount: number;
+  public type: string;
+  public currency: ETokenName;
 
   constructor({ date, amount, type, currency }: ITransactionParams) {
     this.date = date;

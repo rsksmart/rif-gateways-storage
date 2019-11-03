@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import Moment from "moment";
-import CheckSVG from "../rifui/assets/check.svg";
-import ErrorSVG from "../rifui/assets/error.svg";
+import Card from "components/Card";
 import { ETokenName } from "models/Token";
+import Moment from "moment";
+import Web3Provider from "providers/Web3Provider";
+import React, { useState } from "react";
 import {
-  Row,
-  Col,
   Button,
-  Table,
-  Modal,
-  InputGroup,
+  Col,
   Form,
   FormControl,
+  InputGroup,
+  Modal,
+  Nav,
+  Row,
   Tab,
-  Nav
+  Table
 } from "react-bootstrap";
-import Web3Provider from "providers/Web3Provider";
-import Card from "../components/Card";
+import CheckSVG from "rifui/assets/check.svg";
+import ErrorSVG from "rifui/assets/error.svg";
 
 const renderHistory = history => {
   return history.map((item, index) => (
@@ -98,7 +98,7 @@ const MyProfile = () => {
                           {user.tokens.map((b, index) => (
                             <Card
                               key={index}
-                              balance={b.balance[ETokenName.RIF]}
+                              balance={b.balance}
                               rskAddress={user.rskAddress}
                               address={user.address}
                               type="rif-card"
@@ -109,7 +109,7 @@ const MyProfile = () => {
                           {user.tokens.map((b, index) => (
                             <Card
                               key={index}
-                              balance={b.balance[ETokenName.RBTC]}
+                              balance={b.balance}
                               rskAddress={user.rskAddress}
                               address={user.address}
                               type="rsk-card"
